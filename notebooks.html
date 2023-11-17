@@ -362,7 +362,13 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualizacion-estatica">Visualización estática</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualizacion-estatica">Visualización estática</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#analisis-exploratorio-de-los-datos-eda">Análisis exploratorio de los datos (EDA)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#imputacion-de-datos-faltantes">Imputación de datos faltantes</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#grafico-1">Gráfico 1</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#grafico-2">Gráfico 2</a></li>
+</ul>
+</li>
 </ul>
             </nav>
         </div>
@@ -380,17 +386,679 @@ document.write(`
 <h2>Visualización estática<a class="headerlink" href="#visualizacion-estatica" title="Permalink to this heading">#</a></h2>
 <p><strong>Estadísticos</strong>: Seguiremos trabajando con el conjunto de datos de 120 años de historia olímpica adquirido por Randi Griffin en Randi Griffin</p>
 <p>Como especialista en visualización, su tarea consiste en crear dos parcelas para los ganadores de medallas de 2016 de cinco deportes: atletismo, natación, remo, fútbol y hockey</p>
-<p>Crea un gráfico utilizando una técnica de visualización adecuada que presente de la mejor manera posible el patrón global de las características de height y weight de los ganadores de medallas de 2016 de los cinco deportes.</p>
 <p>Crea un gráfico utilizando una técnica de visualización adecuada que presente de la mejor manera posible la estadística de resumen para la altura y el peso de los jugadores que ganaron cada tipo de medalla (oro/plata/bronce) en los datos.</p>
 <p>Utilizar su creatividad y sus habilidades para sacar conclusiones importantes de los datos.</p>
+<section id="analisis-exploratorio-de-los-datos-eda">
+<h3>Análisis exploratorio de los datos (EDA)<a class="headerlink" href="#analisis-exploratorio-de-los-datos-eda" title="Permalink to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">url</span><span class="o">=</span><span class="s2">&quot;https://raw.githubusercontent.com/lihkirun/AppliedStatisticMS/main/DataVisualizationRPython/Lectures/Python/PythonDataSets/athlete_events.csv&quot;</span>
+<span class="n">data</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+<span class="n">data</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Sex</th>
+      <th>Age</th>
+      <th>Height</th>
+      <th>Weight</th>
+      <th>Team</th>
+      <th>NOC</th>
+      <th>Games</th>
+      <th>Year</th>
+      <th>Season</th>
+      <th>City</th>
+      <th>Sport</th>
+      <th>Event</th>
+      <th>Medal</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>A Dijiang</td>
+      <td>M</td>
+      <td>24.0</td>
+      <td>180.0</td>
+      <td>80.0</td>
+      <td>China</td>
+      <td>CHN</td>
+      <td>1992 Summer</td>
+      <td>1992</td>
+      <td>Summer</td>
+      <td>Barcelona</td>
+      <td>Basketball</td>
+      <td>Basketball Men's Basketball</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2</td>
+      <td>A Lamusi</td>
+      <td>M</td>
+      <td>23.0</td>
+      <td>170.0</td>
+      <td>60.0</td>
+      <td>China</td>
+      <td>CHN</td>
+      <td>2012 Summer</td>
+      <td>2012</td>
+      <td>Summer</td>
+      <td>London</td>
+      <td>Judo</td>
+      <td>Judo Men's Extra-Lightweight</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>3</td>
+      <td>Gunnar Nielsen Aaby</td>
+      <td>M</td>
+      <td>24.0</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>Denmark</td>
+      <td>DEN</td>
+      <td>1920 Summer</td>
+      <td>1920</td>
+      <td>Summer</td>
+      <td>Antwerpen</td>
+      <td>Football</td>
+      <td>Football Men's Football</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>4</td>
+      <td>Edgar Lindenau Aabye</td>
+      <td>M</td>
+      <td>34.0</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>Denmark/Sweden</td>
+      <td>DEN</td>
+      <td>1900 Summer</td>
+      <td>1900</td>
+      <td>Summer</td>
+      <td>Paris</td>
+      <td>Tug-Of-War</td>
+      <td>Tug-Of-War Men's Tug-Of-War</td>
+      <td>Gold</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>5</td>
+      <td>Christine Jacoba Aaftink</td>
+      <td>F</td>
+      <td>21.0</td>
+      <td>185.0</td>
+      <td>82.0</td>
+      <td>Netherlands</td>
+      <td>NED</td>
+      <td>1988 Winter</td>
+      <td>1988</td>
+      <td>Winter</td>
+      <td>Calgary</td>
+      <td>Speed Skating</td>
+      <td>Speed Skating Women's 500 metres</td>
+      <td>NaN</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;Sport&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([&#39;Basketball&#39;, &#39;Judo&#39;, &#39;Football&#39;, &#39;Tug-Of-War&#39;, &#39;Speed Skating&#39;,
+       &#39;Cross Country Skiing&#39;, &#39;Athletics&#39;, &#39;Ice Hockey&#39;, &#39;Swimming&#39;,
+       &#39;Badminton&#39;, &#39;Sailing&#39;, &#39;Biathlon&#39;, &#39;Gymnastics&#39;,
+       &#39;Art Competitions&#39;, &#39;Alpine Skiing&#39;, &#39;Handball&#39;, &#39;Weightlifting&#39;,
+       &#39;Wrestling&#39;, &#39;Luge&#39;, &#39;Water Polo&#39;, &#39;Hockey&#39;, &#39;Rowing&#39;, &#39;Bobsleigh&#39;,
+       &#39;Fencing&#39;, &#39;Equestrianism&#39;, &#39;Shooting&#39;, &#39;Boxing&#39;, &#39;Taekwondo&#39;,
+       &#39;Cycling&#39;, &#39;Diving&#39;, &#39;Canoeing&#39;, &#39;Tennis&#39;, &#39;Modern Pentathlon&#39;,
+       &#39;Figure Skating&#39;, &#39;Golf&#39;, &#39;Softball&#39;, &#39;Archery&#39;, &#39;Volleyball&#39;,
+       &#39;Synchronized Swimming&#39;, &#39;Table Tennis&#39;, &#39;Nordic Combined&#39;,
+       &#39;Baseball&#39;, &#39;Rhythmic Gymnastics&#39;, &#39;Freestyle Skiing&#39;,
+       &#39;Rugby Sevens&#39;, &#39;Trampolining&#39;, &#39;Beach Volleyball&#39;, &#39;Triathlon&#39;,
+       &#39;Ski Jumping&#39;, &#39;Curling&#39;, &#39;Snowboarding&#39;, &#39;Rugby&#39;,
+       &#39;Short Track Speed Skating&#39;, &#39;Skeleton&#39;, &#39;Lacrosse&#39;, &#39;Polo&#39;,
+       &#39;Cricket&#39;, &#39;Racquets&#39;, &#39;Motorboating&#39;, &#39;Military Ski Patrol&#39;,
+       &#39;Croquet&#39;, &#39;Jeu De Paume&#39;, &#39;Roque&#39;, &#39;Alpinism&#39;, &#39;Basque Pelota&#39;,
+       &#39;Aeronautics&#39;], dtype=object)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">deporte</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Athletics&#39;</span><span class="p">,</span><span class="s1">&#39;Swimming&#39;</span><span class="p">,</span><span class="s1">&#39;Football&#39;</span><span class="p">,</span><span class="s1">&#39;Rowing&#39;</span><span class="p">,</span><span class="s1">&#39;Hockey&#39;</span><span class="p">]</span>
+<span class="n">data_top5</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;Sport&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">deporte</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;Year&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">2016</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;Medal&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">notnull</span><span class="p">())]</span>
+<span class="n">data_top5</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Sex</th>
+      <th>Age</th>
+      <th>Height</th>
+      <th>Weight</th>
+      <th>Team</th>
+      <th>NOC</th>
+      <th>Games</th>
+      <th>Year</th>
+      <th>Season</th>
+      <th>City</th>
+      <th>Sport</th>
+      <th>Event</th>
+      <th>Medal</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>158</th>
+      <td>62</td>
+      <td>Giovanni Abagnale</td>
+      <td>M</td>
+      <td>21.0</td>
+      <td>198.0</td>
+      <td>90.0</td>
+      <td>Italy</td>
+      <td>ITA</td>
+      <td>2016 Summer</td>
+      <td>2016</td>
+      <td>Summer</td>
+      <td>Rio de Janeiro</td>
+      <td>Rowing</td>
+      <td>Rowing Men's Coxless Pairs</td>
+      <td>Bronze</td>
+    </tr>
+    <tr>
+      <th>814</th>
+      <td>465</td>
+      <td>Matthew "Matt" Abood</td>
+      <td>M</td>
+      <td>30.0</td>
+      <td>197.0</td>
+      <td>92.0</td>
+      <td>Australia</td>
+      <td>AUS</td>
+      <td>2016 Summer</td>
+      <td>2016</td>
+      <td>Summer</td>
+      <td>Rio de Janeiro</td>
+      <td>Swimming</td>
+      <td>Swimming Men's 4 x 100 metres Freestyle Relay</td>
+      <td>Bronze</td>
+    </tr>
+    <tr>
+      <th>1228</th>
+      <td>690</td>
+      <td>Chantal Achterberg</td>
+      <td>F</td>
+      <td>31.0</td>
+      <td>172.0</td>
+      <td>72.0</td>
+      <td>Netherlands</td>
+      <td>NED</td>
+      <td>2016 Summer</td>
+      <td>2016</td>
+      <td>Summer</td>
+      <td>Rio de Janeiro</td>
+      <td>Rowing</td>
+      <td>Rowing Women's Quadruple Sculls</td>
+      <td>Silver</td>
+    </tr>
+    <tr>
+      <th>1529</th>
+      <td>846</td>
+      <td>Valerie Kasanita Adams-Vili (-Price)</td>
+      <td>F</td>
+      <td>31.0</td>
+      <td>193.0</td>
+      <td>120.0</td>
+      <td>New Zealand</td>
+      <td>NZL</td>
+      <td>2016 Summer</td>
+      <td>2016</td>
+      <td>Summer</td>
+      <td>Rio de Janeiro</td>
+      <td>Athletics</td>
+      <td>Athletics Women's Shot Put</td>
+      <td>Silver</td>
+    </tr>
+    <tr>
+      <th>1847</th>
+      <td>1017</td>
+      <td>Nathan Ghar-Jun Adrian</td>
+      <td>M</td>
+      <td>27.0</td>
+      <td>198.0</td>
+      <td>100.0</td>
+      <td>United States</td>
+      <td>USA</td>
+      <td>2016 Summer</td>
+      <td>2016</td>
+      <td>Summer</td>
+      <td>Rio de Janeiro</td>
+      <td>Swimming</td>
+      <td>Swimming Men's 50 metres Freestyle</td>
+      <td>Bronze</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">### Verificación de datos faltantes:</span>
+<span class="n">missing_data</span><span class="o">=</span><span class="n">data_top5</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+<span class="n">missing_data</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>ID        0
+Name      0
+Sex       0
+Age       0
+Height    3
+Weight    5
+Team      0
+NOC       0
+Games     0
+Year      0
+Season    0
+City      0
+Sport     0
+Event     0
+Medal     0
+dtype: int64
+</pre></div>
+</div>
+</div>
+</div>
+<p>Vemos que 2 variables tienen datos faltantes.</p>
+</section>
+<section id="imputacion-de-datos-faltantes">
+<h3>Imputación de datos faltantes<a class="headerlink" href="#imputacion-de-datos-faltantes" title="Permalink to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data_top5</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+Index: 732 entries, 158 to 271019
+Data columns (total 15 columns):
+ #   Column  Non-Null Count  Dtype  
+---  ------  --------------  -----  
+ 0   ID      732 non-null    int64  
+ 1   Name    732 non-null    object 
+ 2   Sex     732 non-null    object 
+ 3   Age     732 non-null    float64
+ 4   Height  729 non-null    float64
+ 5   Weight  727 non-null    float64
+ 6   Team    732 non-null    object 
+ 7   NOC     732 non-null    object 
+ 8   Games   732 non-null    object 
+ 9   Year    732 non-null    int64  
+ 10  Season  732 non-null    object 
+ 11  City    732 non-null    object 
+ 12  Sport   732 non-null    object 
+ 13  Event   732 non-null    object 
+ 14  Medal   732 non-null    object 
+dtypes: float64(3), int64(2), object(10)
+memory usage: 91.5+ KB
+</pre></div>
+</div>
+</div>
+</div>
+<p>En la muestra se tienen 84576 registros y 15 columnas, con 5 variables numéricas y 10 de tipo objeto o categóricas.</p>
+<p>Las variables presentes son:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data_top5</span><span class="o">.</span><span class="n">columns</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Index([&#39;ID&#39;, &#39;Name&#39;, &#39;Sex&#39;, &#39;Age&#39;, &#39;Height&#39;, &#39;Weight&#39;, &#39;Team&#39;, &#39;NOC&#39;, &#39;Games&#39;,
+       &#39;Year&#39;, &#39;Season&#39;, &#39;City&#39;, &#39;Sport&#39;, &#39;Event&#39;, &#39;Medal&#39;],
+      dtype=&#39;object&#39;)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data_top5</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(732, 15)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data_top5</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span><span class="o">.</span><span class="n">T</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>count</th>
+      <th>mean</th>
+      <th>std</th>
+      <th>min</th>
+      <th>25%</th>
+      <th>50%</th>
+      <th>75%</th>
+      <th>max</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>ID</th>
+      <td>732.0</td>
+      <td>68648.244536</td>
+      <td>39361.251654</td>
+      <td>62.0</td>
+      <td>32676.75</td>
+      <td>73187.0</td>
+      <td>103225.0</td>
+      <td>135525.0</td>
+    </tr>
+    <tr>
+      <th>Age</th>
+      <td>732.0</td>
+      <td>25.577869</td>
+      <td>4.451373</td>
+      <td>16.0</td>
+      <td>22.00</td>
+      <td>25.0</td>
+      <td>29.0</td>
+      <td>40.0</td>
+    </tr>
+    <tr>
+      <th>Height</th>
+      <td>729.0</td>
+      <td>180.023320</td>
+      <td>10.076398</td>
+      <td>150.0</td>
+      <td>173.00</td>
+      <td>180.0</td>
+      <td>187.0</td>
+      <td>207.0</td>
+    </tr>
+    <tr>
+      <th>Weight</th>
+      <td>727.0</td>
+      <td>73.720770</td>
+      <td>14.279014</td>
+      <td>40.0</td>
+      <td>64.00</td>
+      <td>72.0</td>
+      <td>82.0</td>
+      <td>136.0</td>
+    </tr>
+    <tr>
+      <th>Year</th>
+      <td>732.0</td>
+      <td>2016.000000</td>
+      <td>0.000000</td>
+      <td>2016.0</td>
+      <td>2016.00</td>
+      <td>2016.0</td>
+      <td>2016.0</td>
+      <td>2016.0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data_top5</span><span class="o">.</span><span class="n">describe</span><span class="p">(</span><span class="n">include</span><span class="o">=</span><span class="nb">object</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>count</th>
+      <th>unique</th>
+      <th>top</th>
+      <th>freq</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Name</th>
+      <td>732</td>
+      <td>648</td>
+      <td>Michael Fred Phelps, II</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <th>Sex</th>
+      <td>732</td>
+      <td>2</td>
+      <td>M</td>
+      <td>377</td>
+    </tr>
+    <tr>
+      <th>Team</th>
+      <td>732</td>
+      <td>54</td>
+      <td>United States</td>
+      <td>127</td>
+    </tr>
+    <tr>
+      <th>NOC</th>
+      <td>732</td>
+      <td>54</td>
+      <td>USA</td>
+      <td>127</td>
+    </tr>
+    <tr>
+      <th>Games</th>
+      <td>732</td>
+      <td>1</td>
+      <td>2016 Summer</td>
+      <td>732</td>
+    </tr>
+    <tr>
+      <th>Season</th>
+      <td>732</td>
+      <td>1</td>
+      <td>Summer</td>
+      <td>732</td>
+    </tr>
+    <tr>
+      <th>City</th>
+      <td>732</td>
+      <td>1</td>
+      <td>Rio de Janeiro</td>
+      <td>732</td>
+    </tr>
+    <tr>
+      <th>Sport</th>
+      <td>732</td>
+      <td>5</td>
+      <td>Athletics</td>
+      <td>192</td>
+    </tr>
+    <tr>
+      <th>Event</th>
+      <td>732</td>
+      <td>99</td>
+      <td>Football Women's Football</td>
+      <td>54</td>
+    </tr>
+    <tr>
+      <th>Medal</th>
+      <td>732</td>
+      <td>3</td>
+      <td>Gold</td>
+      <td>254</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</section>
+<section id="grafico-1">
+<h3>Gráfico 1<a class="headerlink" href="#grafico-1" title="Permalink to this heading">#</a></h3>
+<p>Crea un gráfico utilizando una técnica de visualización adecuada que presente de la mejor manera posible el patrón global de las características de height y weight de los ganadores de medallas de 2016 de los cinco deportes.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">deporte</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;Athletics&#39;, &#39;Swimming&#39;, &#39;Football&#39;, &#39;Rowing&#39;, &#39;Hockey&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">scatterplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;Height&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;Weight&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data_top5</span><span class="p">[</span><span class="n">data_top5</span><span class="p">[</span><span class="s1">&#39;Sport&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;Athletics&#39;</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;lightgreen&#39;</span><span class="p">)</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">scatterplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;Height&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;Weight&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data_top5</span><span class="p">[</span><span class="n">data_top5</span><span class="p">[</span><span class="s1">&#39;Sport&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;Swimming&#39;</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">scatterplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;Height&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;Weight&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data_top5</span><span class="p">[</span><span class="n">data_top5</span><span class="p">[</span><span class="s1">&#39;Sport&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;Football&#39;</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">)</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">scatterplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;Height&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;Weight&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data_top5</span><span class="p">[</span><span class="n">data_top5</span><span class="p">[</span><span class="s1">&#39;Sport&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;Rowing&#39;</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;purple&#39;</span><span class="p">)</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">scatterplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;Height&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;Weight&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data_top5</span><span class="p">[</span><span class="n">data_top5</span><span class="p">[</span><span class="s1">&#39;Sport&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;Hockey&#39;</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;orange&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">labels</span><span class="o">=</span><span class="n">deporte</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Relación entre la variabel Height y Weight en los ganadores de medallas de 2016&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/bc557b487bf203ad2a456a63882b353efb1f3e8707d60829f597947c8b8b442c.png" src="_images/bc557b487bf203ad2a456a63882b353efb1f3e8707d60829f597947c8b8b442c.png" />
+</div>
+</div>
+</section>
+<section id="grafico-2">
+<h3>Gráfico 2<a class="headerlink" href="#grafico-2" title="Permalink to this heading">#</a></h3>
+<p>Crea un gráfico utilizando una técnica de visualización adecuada que presente de la mejor manera posible la estadística de resumen para la altura y el peso de los jugadores que ganaron cada tipo de medalla (oro/plata/bronce) en los datos.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+<span class="n">ax</span><span class="o">=</span><span class="n">sns</span><span class="o">.</span><span class="n">violinplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">&#39;Medal&#39;</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="s1">&#39;Height&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data_top5</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;Sport&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">palette</span><span class="o">=</span><span class="s1">&#39;Set2&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Distribución de Alturas por Tipo de Medalla&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper left&#39;</span><span class="p">,</span> <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="n">ax</span><span class="o">=</span><span class="n">sns</span><span class="o">.</span><span class="n">violinplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">&#39;Medal&#39;</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="s1">&#39;Weight&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data_top5</span><span class="p">,</span><span class="n">hue</span><span class="o">=</span><span class="s1">&#39;Sport&#39;</span><span class="p">,</span>  <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">palette</span><span class="o">=</span><span class="s1">&#39;Set2&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Distribución de Pesos por Tipo de Medalla&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper left&#39;</span><span class="p">,</span> <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/087fd3b071eb03a7f26ae6dc7495824c8347b68069f9ed538f7755e22cc6d575.png" src="_images/087fd3b071eb03a7f26ae6dc7495824c8347b68069f9ed538f7755e22cc6d575.png" />
+</div>
+</div>
+</section>
 </section>
 </section>
 
@@ -448,7 +1116,13 @@ document.write(`
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualizacion-estatica">Visualización estática</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualizacion-estatica">Visualización estática</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#analisis-exploratorio-de-los-datos-eda">Análisis exploratorio de los datos (EDA)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#imputacion-de-datos-faltantes">Imputación de datos faltantes</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#grafico-1">Gráfico 1</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#grafico-2">Gráfico 2</a></li>
+</ul>
+</li>
 </ul>
   </nav></div>
 
