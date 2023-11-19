@@ -365,6 +365,7 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualizacion-estatica">Visualización estática</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#analisis-exploratorio-de-los-datos-eda">Análisis exploratorio de los datos (EDA)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#imputacion-de-datos-faltantes">Imputación de datos faltantes</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#analisis-exploratorio-top-5">Análisis exploratorio (TOP 5)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#grafico-1">Gráfico 1</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#grafico-2">Gráfico 2</a></li>
 </ul>
@@ -570,6 +571,21 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;Year&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([1992, 2012, 1920, 1900, 1988, 1994, 1932, 2002, 1952, 1980, 2000,
+       1996, 1912, 1924, 2014, 1948, 1998, 2006, 2008, 2016, 2004, 1960,
+       1964, 1984, 1968, 1972, 1936, 1956, 1928, 1976, 2010, 1906, 1904,
+       1908, 1896], dtype=int64)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">deporte</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Athletics&#39;</span><span class="p">,</span><span class="s1">&#39;Swimming&#39;</span><span class="p">,</span><span class="s1">&#39;Football&#39;</span><span class="p">,</span><span class="s1">&#39;Rowing&#39;</span><span class="p">,</span><span class="s1">&#39;Hockey&#39;</span><span class="p">]</span>
 <span class="n">data_top5</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;Sport&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">deporte</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;Year&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">2016</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;Medal&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">notnull</span><span class="p">())]</span>
 <span class="n">data_top5</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
@@ -707,6 +723,9 @@ document.write(`
 </table>
 </div></div></div>
 </div>
+</section>
+<section id="imputacion-de-datos-faltantes">
+<h3>Imputación de datos faltantes<a class="headerlink" href="#imputacion-de-datos-faltantes" title="Permalink to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">### Verificación de datos faltantes:</span>
@@ -736,10 +755,20 @@ dtype: int64
 </div>
 </div>
 </div>
-<p>Vemos que 2 variables tienen datos faltantes.</p>
+<p>Vemos que 2 variables tienen datos faltantes Son pocos datos, se optó por realizar imputación de los datos faltantes en lugar de eliminarlos.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">median_Weight</span> <span class="o">=</span> <span class="n">data_top5</span><span class="p">[</span><span class="s1">&#39;Weight&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">median</span><span class="p">()</span>
+<span class="n">median_Height</span><span class="o">=</span><span class="n">data_top5</span><span class="p">[</span><span class="s1">&#39;Height&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">median</span><span class="p">()</span>
+<span class="n">data_top5</span><span class="p">[</span><span class="s1">&#39;Weight&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">median_Weight</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">data_top5</span><span class="p">[</span><span class="s1">&#39;Height&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">median_Height</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
 </section>
-<section id="imputacion-de-datos-faltantes">
-<h3>Imputación de datos faltantes<a class="headerlink" href="#imputacion-de-datos-faltantes" title="Permalink to this heading">#</a></h3>
+<section id="analisis-exploratorio-top-5">
+<h3>Análisis exploratorio (TOP 5)<a class="headerlink" href="#analisis-exploratorio-top-5" title="Permalink to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data_top5</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
@@ -756,8 +785,8 @@ Data columns (total 15 columns):
  1   Name    732 non-null    object 
  2   Sex     732 non-null    object 
  3   Age     732 non-null    float64
- 4   Height  729 non-null    float64
- 5   Weight  727 non-null    float64
+ 4   Height  732 non-null    float64
+ 5   Weight  732 non-null    float64
  6   Team    732 non-null    object 
  7   NOC     732 non-null    object 
  8   Games   732 non-null    object 
@@ -861,9 +890,9 @@ memory usage: 91.5+ KB
     </tr>
     <tr>
       <th>Height</th>
-      <td>729.0</td>
-      <td>180.023320</td>
-      <td>10.076398</td>
+      <td>732.0</td>
+      <td>180.023224</td>
+      <td>10.055700</td>
       <td>150.0</td>
       <td>173.00</td>
       <td>180.0</td>
@@ -872,9 +901,9 @@ memory usage: 91.5+ KB
     </tr>
     <tr>
       <th>Weight</th>
-      <td>727.0</td>
-      <td>73.720770</td>
-      <td>14.279014</td>
+      <td>732.0</td>
+      <td>73.709016</td>
+      <td>14.230803</td>
       <td>40.0</td>
       <td>64.00</td>
       <td>72.0</td>
@@ -896,6 +925,7 @@ memory usage: 91.5+ KB
 </table>
 </div></div></div>
 </div>
+<p>Los ganadores de medallas en el top 5 de deportes para el año 2016 tenían un peso promedio de 73,7 Kg con una desviación  estándar de 14.23. Adicional a eso, una altura promedio de 180.02 cm, con registros mínos de 150.0 cm y 207.0 cm</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data_top5</span><span class="o">.</span><span class="n">describe</span><span class="p">(</span><span class="n">include</span><span class="o">=</span><span class="nb">object</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
@@ -1002,6 +1032,7 @@ memory usage: 91.5+ KB
 </table>
 </div></div></div>
 </div>
+<p>Vemos que participaron 54 equipos en total, y que se obtuvieron en general 254 medallas de oro de 737 en total.</p>
 </section>
 <section id="grafico-1">
 <h3>Gráfico 1<a class="headerlink" href="#grafico-1" title="Permalink to this heading">#</a></h3>
@@ -1033,9 +1064,10 @@ memory usage: 91.5+ KB
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/bc557b487bf203ad2a456a63882b353efb1f3e8707d60829f597947c8b8b442c.png" src="_images/bc557b487bf203ad2a456a63882b353efb1f3e8707d60829f597947c8b8b442c.png" />
+<img alt="_images/238bf76241ff2c2603766b926f9a6a460b5233ccc11abfe0368cc0d9f7544f3c.png" src="_images/238bf76241ff2c2603766b926f9a6a460b5233ccc11abfe0368cc0d9f7544f3c.png" />
 </div>
 </div>
+<p>Puede visualizarse la tendencia presente entre las variables peso y altura de los participantes ganadores en el top 5 de deportes. Puede verse que a medida que aumenta la altura del participante, aumenta su peso, lo cual es lógico. En atletismo hay mayores degistros de peso por encima de los 100kg, con altura superior a los 180 cm.</p>
 </section>
 <section id="grafico-2">
 <h3>Gráfico 2<a class="headerlink" href="#grafico-2" title="Permalink to this heading">#</a></h3>
@@ -1055,7 +1087,7 @@ memory usage: 91.5+ KB
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/087fd3b071eb03a7f26ae6dc7495824c8347b68069f9ed538f7755e22cc6d575.png" src="_images/087fd3b071eb03a7f26ae6dc7495824c8347b68069f9ed538f7755e22cc6d575.png" />
+<img alt="_images/e641d48d1af54d1791dcdb005c2e7d74fa2945f83e6033cb85569497d5aa6449.png" src="_images/e641d48d1af54d1791dcdb005c2e7d74fa2945f83e6033cb85569497d5aa6449.png" />
 </div>
 </div>
 </section>
@@ -1119,6 +1151,7 @@ memory usage: 91.5+ KB
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualizacion-estatica">Visualización estática</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#analisis-exploratorio-de-los-datos-eda">Análisis exploratorio de los datos (EDA)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#imputacion-de-datos-faltantes">Imputación de datos faltantes</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#analisis-exploratorio-top-5">Análisis exploratorio (TOP 5)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#grafico-1">Gráfico 1</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#grafico-2">Gráfico 2</a></li>
 </ul>
